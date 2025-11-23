@@ -20,6 +20,8 @@
   "homepage": "https://github.com/fabiolapoustis/trabajo-practico-programacion-3-#readme",
   "dependencies": {
     "ejs": "^3.1.10",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mysql2": "^3.15.3",
+    "sequelize": "^6.37.7"
   }
 }
