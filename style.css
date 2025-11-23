@@ -26,6 +26,10 @@ header {
   height: 20px;
 }
 
+h1 {
+  text-decoration: dashed;
+}
+
 h2, h3 {
   text-align: center;
 }
