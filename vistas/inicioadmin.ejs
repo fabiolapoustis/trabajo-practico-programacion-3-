@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio Admin</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        input {
+            width: 95%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px;
+            width: 100%;
+            background: #2c7dfc;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0051a8;
+        }
+    </style>
+</head>
+<body>
+
+    <form action="/inicioadmin" method="POST">
+        <h2>Inicio Admin</h2>
+        <input type="text" name="usuario" placeholder="Usuario" required>
+        <input type="password" name="contraseña" placeholder="Contraseña" required>
+        <button type="submit">Ingresar</button>
+    </form>
+
+</body>
+</html>

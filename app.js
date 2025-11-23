@@ -1,11 +1,19 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 const port = 3000;
 
-app.get('/', (req, res) => {
-  res.send('Express andando desde VS Code!');
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'vistas'));
+
+
+app.get('/inicioadmin', (req, res) => {
+    res.render('inicioadmin');
 });
 
+
+
 app.listen(port, () => {
-  console.log(`Servidor iniciado en: http://localhost:${port}`);
+    console.log(`Servidor corriendo en http://localhost:${port}`);
 });
