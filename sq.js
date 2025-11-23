@@ -7,6 +7,8 @@ const { Sequelize, DataTypes } = require("sequelize");
 const app = express();
 const PORT = 3000;
 
+const db_port= 3306
+
 app.use(express.json());
 
 //conexion bbdd
@@ -14,7 +16,7 @@ app.use(express.json());
 const sequelize = new Sequelize("PG","root","",{
     host: "localhost",
     dialect: "mysql",
-    port: PORT,
+    port: db_port,
 })
 
 module.exports = { sequelize, DataTypes};
