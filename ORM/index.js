@@ -6,7 +6,6 @@ import { sequelize } from "./db/db.js";
 import { Usuario } from "./modelos/index.js";
 import { Producto } from "./modelos/producto.js";
 import { Venta } from "./modelos/venta.js";
-import { Orden_venta } from "./modelos/orden_venta.js";
 
 
 //rutas
@@ -60,6 +59,18 @@ const initDDBB = async () => {
     categoria: "Gato",
     estado: "activo"
   });
+
+  await Venta.create({
+    nombre: "Josesito",
+    fecha: "12/10/2024",
+    total: 7894651.5
+  });
+
+  await Venta.create({
+    nombre: "Martuli",
+    fecha: "25/09/2025",
+    total: 2364
+  })
 }
 
 //Definicion rutas

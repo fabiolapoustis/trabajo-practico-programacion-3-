@@ -7,7 +7,7 @@ export const Venta = sequelize.define("Venta",{
         primaryKey: true,
         autoIncrement: true
     },
-    nombre_usuario:{type:
+    nombre:{type:
         DataTypes.STRING,
         allowNull: false
     },
