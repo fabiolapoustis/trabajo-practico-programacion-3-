@@ -13,12 +13,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
   "bugs": {
     "url": "https://github.com/fabiolapoustis/trabajo-practico-programacion-3-/issues"
   },
   "homepage": "https://github.com/fabiolapoustis/trabajo-practico-programacion-3-#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "multer": "^2.0.2",
