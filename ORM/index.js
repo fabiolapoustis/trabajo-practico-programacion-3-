@@ -12,6 +12,7 @@ import { Venta } from "./modelos/venta.js";
 
 import cors from "cors";
 import ususarioRuta from "./rutas/usuario.js";
+import productoRuta from "./rutas/producto.js"
 
 const app = express();
 const PORT = 3000;
@@ -39,7 +40,7 @@ const initDDBB = async () => {
     descripcion: "Como peina este peine",
     imagen: "",
     categoria: "Gato",
-    estado: "activo"
+    activo: true
   });
 
   await Producto.create({
@@ -48,7 +49,7 @@ const initDDBB = async () => {
     descripcion: "Te rasuro el papo",
     imagen: "",
     categoria: "Perro",
-    estado: "activo"
+    activo: true
   });
 
   await Producto.create({
@@ -57,7 +58,7 @@ const initDDBB = async () => {
     descripcion: "Torerita beige con voladitos",
     imagen: "",
     categoria: "Gato",
-    estado: "activo"
+    activo: false
   });
 
   await Venta.create({
@@ -76,6 +77,7 @@ const initDDBB = async () => {
 //Definicion rutas
 
 app.use("/usuario", ususarioRuta);
+app.use("/producto", productoRuta);
 
 sequelize
   .sync({ force: true })

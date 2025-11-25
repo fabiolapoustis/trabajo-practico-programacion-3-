@@ -23,8 +23,7 @@ export const Producto = sequelize.define("Producto",{
     categoria:{type:
         DataTypes.STRING
     },
-    estado:{type:
-        DataTypes.STRING,
-        allowNull: false
+    activo:{type:
+        DataTypes.BOOLEAN
     }
 })
