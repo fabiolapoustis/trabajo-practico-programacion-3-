@@ -1,4 +1,4 @@
-import { Usuario } from "../modelos/index.js";
+import { Usuario } from "../modelos/usuario.js";
 
 export const getUsuario = async (req, res) => {
     try{
@@ -9,3 +9,16 @@ export const getUsuario = async (req, res) => {
         res.send(error);
     }
 };
+
+export const crearUsuario = async (req, res) => {
+    try{
+        const {nombre, pass, email} = req.body;
+
+        const usuario = await Usuario.create({nombre,email,pass});
+
+        res.send(usuario);
+
+    } catch (error){
+        res.send(error)
+    }
+}

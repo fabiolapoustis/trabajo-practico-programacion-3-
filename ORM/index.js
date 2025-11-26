@@ -6,6 +6,7 @@ import { sequelize } from "./db/db.js";
 import { Usuario } from "./modelos/index.js";
 import { Producto } from "./modelos/producto.js";
 import { Venta } from "./modelos/venta.js";
+import { Venta_detalle } from "./modelos/venta_detalle.js";
 
 
 //rutas

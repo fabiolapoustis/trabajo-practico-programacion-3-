@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { getUsuario } from "../controladores/usuario.js";
+import { getUsuario, crearUsuario } from "../controladores/usuario.js";
 
 const router = Router();
 
 router.get("/", getUsuario);
+router.post("/", crearUsuario);
 
 export default router;

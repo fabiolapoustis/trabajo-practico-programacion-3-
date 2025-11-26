@@ -20,4 +20,5 @@ export const Usuario = sequelize.define("usuario",{
         allowNull: false,
         unique: true
     }
-})
+});
+
