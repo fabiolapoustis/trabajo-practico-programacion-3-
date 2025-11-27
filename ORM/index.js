@@ -12,7 +12,7 @@ import { Venta_detalle } from "./modelos/venta_detalle.js";
 //rutas
 
 import cors from "cors";
-import ususarioRuta from "./rutas/usuario.js";
+import usuarioRuta from "./rutas/usuario.js";
 import productoRuta from "./rutas/producto.js"
 
 const app = express();
@@ -77,7 +77,7 @@ const initDDBB = async () => {
 
 //Definicion rutas
 
-app.use("/usuario", ususarioRuta);
+app.use("/usuario", usuarioRuta);
 app.use("/producto", productoRuta);
 
 sequelize
