@@ -6,6 +6,7 @@ import { getProducto,
     desactivarProducto,
     activarProducto,
     getProductosActivos } from "../controladores/producto.js";
+import { validarProducto } from "../middlewares/validaciones.js";
 
 const router = Router();
 
@@ -21,5 +22,9 @@ router.post("/", crearProducto); // Crear
 router.put("/:id", modificarProducto); // Modificar
 router.delete("/:id", desactivarProducto); // Desactivar (baja lógica)
 router.put("/:id/activar", activarProducto); // Activar
+
+//validaciones
+router.post("/", validarProducto, crearProducto);
+router.put("/:id", validarProducto, modificarProducto);
 
 export default router;

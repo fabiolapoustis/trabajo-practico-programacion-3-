@@ -1,6 +1,10 @@
 import express from "express";
 import { sequelize } from "./db/db.js";
 
+//cargaimagenes
+import path from "path";
+import { fileURLToPath } from 'url';
+
 //modelos
 
 import { Usuario } from "./modelos/index.js";
@@ -14,9 +18,14 @@ import { Venta_detalle } from "./modelos/venta_detalle.js";
 import cors from "cors";
 import usuarioRuta from "./rutas/usuario.js";
 import productoRuta from "./rutas/producto.js"
+import ventaRuta from "./rutas/venta.js";
 
 const app = express();
 const PORT = 3000;
+
+//cargaimagenes
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(cors());
 
@@ -79,6 +88,12 @@ const initDDBB = async () => {
 
 app.use("/usuario", usuarioRuta);
 app.use("/producto", productoRuta);
+app.use("/venta", ventaRuta);
+
+
+
+//cargaimagenes
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 sequelize
   .sync({ force: true })
