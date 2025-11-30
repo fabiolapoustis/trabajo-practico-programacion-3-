@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>P&G Petshop - Menú Principal</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header-principal">
+    <div class="header-content">
+      <img src="img/logo trabajo.png" alt="logo de marca" class="logo">
+      <div class="header-text">
+        <h1>P & G Petshop</h1>
+        <p class="subtitulo">Tu tienda de confianza para mascotas</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="titulo">
+      <h2>¿Para quién querés comprar hoy?</h2>
+      
+      <form action="/menu" method="POST">
+        <input type="hidden" id="tipoMascota" name="tipoMascota">
+
+        <div class="contenedor-botones">
+          <button type="submit" class="btn-mascota" onclick="document.getElementById('tipoMascota').value='perro'">
+            <img src="img/alimento1.jpg" alt="perro">
+            <h3>PERROS</h3>
+          </button>
+
+          <button type="submit" class="btn-mascota" onclick="document.getElementById('tipoMascota').value='gato'">
+            <img src="img/gato.jpg" alt="gato">
+            <h3>GATOS</h3>
+          </button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>

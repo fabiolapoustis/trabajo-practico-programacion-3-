@@ -1,69 +1,288 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Cargar Producto - P & G </title>
-    <style>
-        body {
-            font-family: Arial;
-            background: #f4f4f4;
-            padding: 40px;
-        }
-        form {
-            background: white;
-            padding: 20px;
-            max-width: 450px;
-            margin: auto;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        input, select {
-            width: 95%;
-            padding: 10px;
-            margin: 10px 0;
-        }
-        button {
-            padding: 10px;
-            width: 100%;
-            background: #2c7dfc;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #0051a8;
-        }
-        h2 {
-            text-align: center;
-        }
-    </style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Productos</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+      font-weight: bold;
+    }
+    
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      border: 2px dashed #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+    
+    .modal-content {
+      background-color: white;
+      margin: 15% auto;
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    
+    .modal h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .modal-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-confirmar {
+      background-color: #4CAF50;
+      color: white;
+    }
+    
+    .btn-confirmar:hover {
+      background-color: #45a049;
+    }
+    
+    .btn-cancelar {
+      background-color: #f44336;
+      color: white;
+    }
+    
+    .btn-cancelar:hover {
+      background-color: #da190b;
+    }
+    
+    .producto-info {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      text-align: left;
+    }
+    
+    .producto-info p {
+      margin: 8px 0;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
-
-    <h2>Cargar Producto - P & G</h2>
-
-    <form action="/cargarproducto" method="POST" enctype="multipart/form-data">
-
-        <input type="text" name="titulo" placeholder="Título del producto" required>
-        <input type="text" name="descripcion" placeholder="Descripción del producto" required>
-
-        <select name="categoria" id="categoria" onchange="actualizarCampos()" required>
-            <option value="" disabled selected>Selecciona categoría</option>
-            <option value="comida">Comida</option>
-            <option value="juguetes">Juguetes</option>
-            <option value="accesorios">Accesorios</option>
-            <option value="higiene">Higiene</option>
-            <option value="pulgicidas">Pulgicidas</option>
+  <div class="container">
+    <h1> Gestión de Productos</h1>
+    
+    <form id="productForm" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" name="descripcion" required></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="categoria">Categoría:</label>
+        <select id="categoria" name="categoria" required>
+          <option value="">Seleccione una categoría</option>
+          <option value="perro"> Perro</option>
+          <option value="gato"> Gato</option>
         </select>
-        <input type="number" name="precio" placeholder="Precio" step="0.01" required>
-        <input type="number" name="cantidad" placeholder="Ingrese la cantidad de unidades que tiene en stock" required>
-
-        <label>Imagen del producto:</label>
-        <input type="file" name="imagen" accept="image/*" required>
-
-        <button type="submit">Cargar producto</button>
+      </div>
+      
+      <div class="form-group">
+        <label for="precio">Precio ($):</label>
+        <input type="number" id="precio" name="precio" step="0.01" min="0" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" name="cantidad" min="1" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="imagen">Imagen del producto:</label>
+        <input type="file" id="imagen" name="imagen" accept="image/*" required>
+      </div>
+      
+      <button type="submit" class="btn">Agregar Producto</button>
     </form>
+  </div>
+  
 
+  <div id="confirmModal" class="modal">
+    <div class="modal-content">
+      <h2>⚠️ Confirmar Acción</h2>
+      <p>¿Desea agregar el producto <strong id="productoNombre"></strong> al stock?</p>
+      
+      <div class="producto-info" id="productoDetalle"></div>
+      
+      <div class="modal-buttons">
+        <button class="modal-btn btn-cancelar" onclick="cancelarAgregar()">Cancelar</button>
+        <button class="modal-btn btn-confirmar" onclick="confirmarAgregar()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    let formDataTemp = null;
+    
+    document.getElementById('productForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(e.target);
+      formDataTemp = formData;
+      
+
+      const titulo = formData.get('titulo');
+      const categoria = formData.get('categoria');
+      const precio = formData.get('precio');
+      const cantidad = formData.get('cantidad');
+      const descripcion = formData.get('descripcion');
+      
+
+      document.getElementById('productoNombre').textContent = titulo;
+      document.getElementById('productoDetalle').innerHTML = `
+        <p><strong>Categoría:</strong> ${categoria === 'perro' ? '🐕 Perro' : '🐈 Gato'}</p>
+        <p><strong>Precio:</strong> $${precio}</p>
+        <p><strong>Cantidad:</strong> ${cantidad} unidades</p>
+        <p><strong>Descripción:</strong> ${descripcion}</p>
+      `;
+      
+      document.getElementById('confirmModal').style.display = 'block';
+    });
+    
+    function cancelarAgregar() {
+      document.getElementById('confirmModal').style.display = 'none';
+      formDataTemp = null;
+    }
+    
+    async function confirmarAgregar() {
+      try {
+        const response = await fetch("/api/productos", {
+          method: 'POST',
+          body: formDataTemp
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+          alert("Producto agregado exitosamente!");
+          document.getElementById("productForm").reset();
+          document.getElementById("confirmModal").style.display = "none";
+          formDataTemp = null;
+        } else {
+          alert( "Error: " + result.error);
+        }
+      } catch (error) {
+        alert("Error al agregar el producto: " + error.message);
+      }
+    }
+    
+  </script>
 </body>
 </html>
+

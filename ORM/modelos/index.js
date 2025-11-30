@@ -1,13 +1,10 @@
-//Importar Tablas
-import { Usuario } from "./usuario.js";
 import { Venta } from "./venta.js";
 import { Producto } from "./producto.js";
-
-//Definir Relaciones
-
-// 1:1 usuario
+import { Usuario } from "./usuario.js";
+import { Venta_detalle } from "./venta_detalle.js";
 
 
-//Exportar Relaciones
+Venta.belongsToMany(Producto, { through: 'Venta_detalle', foreignKey: 'ventaId' });
+Producto.belongsToMany(Venta, { through: 'Venta_detalle', foreignKey: 'productoId' });
 
-export {Usuario,Venta,Producto};
+export {Usuario,Venta,Producto,Venta_detalle};
