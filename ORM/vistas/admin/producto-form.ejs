@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= titulo %> - P&G Petshop</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      flex-wrap: wrap;
+    }
+    
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: white;
+    }
+    
+    .navbar-brand h1 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    .navbar-menu {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+    
+    .nav-link:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    .nav-link.active {
+      background: rgba(255,255,255,0.3);
+    }
+    
+    .user-info {
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .logout-btn {
+      background: #f44336;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+    
+    .logout-btn:hover {
+      background: #d32f2f;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    
+    .page-header {
+      margin-bottom: 30px;
+    }
+    
+    .page-header h2 {
+      color: #333;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    
+    .breadcrumb {
+      color: #666;
+      font-size: 14px;
+    }
+    
+    .breadcrumb a {
+      color: #667eea;
+      text-decoration: none;
+    }
+    
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+    
+    .form-container {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    label span {
+      color: #f44336;
+    }
+    
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: all 0.3s;
+      outline: none;
+      font-family: inherit;
+    }
+    
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    .file-input-wrapper input[type=file] {
+      position: absolute;
+      left: -9999px;
+    }
+    
+    .file-input-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 40px;
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: #fafafa;
+    }
+    
+    .file-input-label:hover {
+      border-color: #667eea;
+      background: #f0f4ff;
+    }
+    
+    .file-input-label.has-file {
+      border-color: #4caf50;
+      background: #e8f5e9;
+    }
+    
+    .preview-container {
+      margin-top: 15px;
+      text-align: center;
+    }
+    
+    .preview-image {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .current-image {
+      margin-top: 10px;
+      padding: 10px;
+      background: #e3f2fd;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #1976d2;
+    }
+    
+    .error-message {
+      background: #ffebee;
+      color: #c62828;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border-left: 4px solid #c62828;
+      font-size: 14px;
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+    
+    .btn {
+      padding: 14px 28px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 16px;
+      flex: 1;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-secondary {
+      background: #e0e0e0;
+      color: #333;
+    }
+    
+    .btn-secondary:hover {
+      background: #d0d0d0;
+    }
+    
+    .help-text {
+      font-size: 13px;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+      }
+      
+      .navbar-menu {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      .form-container {
+        padding: 20px;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <span style="font-size: 32px;">🐾</span>
+      <div>
+        <h1>P&G Petshop</h1>
+        <small style="opacity: 0.9;">Panel de Administración</small>
+      </div>
+    </div>
+    
+    <div class="navbar-menu">
+      <a href="/admin/dashboard" class="nav-link">📊 Dashboard</a>
+      <a href="/admin/productos" class="nav-link active">📦 Productos</a>
+      <a href="/admin/ventas" class="nav-link">💰 Ventas</a>
+      <a href="/admin/usuarios" class="nav-link">👥 Usuarios</a>
+      
+      <div class="user-info">
+        <span>👤 <%= usuario.nombre %></span>
+        <a href="/admin/logout">
+          <button class="logout-btn">Salir</button>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h2><%= producto ? '✏️ Editar' : '➕ Agregar' %> Producto</h2>
+      <div class="breadcrumb">
+        <a href="/admin/dashboard">Dashboard</a> / 
+        <a href="/admin/productos">Productos</a> / 
+        <%= producto ? 'Editar' : 'Agregar' %>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <% if (error) { %>
+        <div class="error-message">
+          ⚠️ <%= error %>
+        </div>
+      <% } %>
+
+      <form action="<%= producto ? `/admin/productos/editar/${producto.id}` : '/admin/productos/crear' %>" 
+            method="POST" 
+            enctype="multipart/form-data">
+        
+        <div class="form-group">
+          <label for="nombre">
+            📝 Nombre del Producto <span>*</span>
+          </label>
+          <input 
+            type="text" 
+            id="nombre" 
+            name="nombre" 
+            value="<%= producto ? producto.nombre : '' %>"
+            placeholder="Ej: Collar ajustable"
+            required
+          >
+          <div class="help-text">Ingrese un nombre descriptivo para el producto</div>
+        </div>
+
+        <div class="form-group">
+          <label for="descripcion">
+            📄 Descripción
+          </label>
+          <textarea 
+            id="descripcion" 
+            name="descripcion" 
+            placeholder="Describe las características del producto..."
+          ><%= producto ? producto.descripcion : '' %></textarea>
+          <div class="help-text">Opcional: Agregue detalles que ayuden al cliente</div>
+        </div>
+
+        <div class="form-group">
+          <label for="categoria">
+            🏷️ Categoría <span>*</span>
+          </label>
+          <select id="categoria" name="categoria" required>
+            <option value="">Seleccione una categoría</option>
+            <option value="Perro" <%= producto && producto.categoria === 'Perro' ? 'selected' : '' %>>
+              🐕 Perro
+            </option>
+            <option value="Gato" <%= producto && producto.categoria === 'Gato' ? 'selected' : '' %>>
+              🐈 Gato
+            </option>
+          </select>
+          <div class="help-text">Seleccione para qué tipo de mascota es el producto</div>
+        </div>
+
+        <div class="form-group">
+          <label for="precio">
+            💵 Precio <span>*</span>
+          </label>
+          <input 
+            type="number" 
+            id="precio" 
+            name="precio" 
+            value="<%= producto ? producto.precio : '' %>"
+            placeholder="0.00"
+            step="0.01"
+            min="0"
+            required
+          >
+          <div class="help-text">Ingrese el precio en pesos argentinos</div>
+        </div>
+
+        <div class="form-group">
+          <label for="imagen">
+            🖼️ Imagen del Producto <%= producto ? '' : '<span>*</span>' %>
+          </label>
+          
+          <% if (producto && producto.imagen) { %>
+            <div class="current-image">
+              📷 Imagen actual: <%= producto.imagen.split('/').pop() %>
+            </div>
+            <div class="preview-container">
+              <img src="<%= producto.imagen %>" alt="Imagen actual" class="preview-image">
+            </div>
+            <div class="help-text" style="margin-top: 10px;">
+              Para cambiar la imagen, seleccione una nueva. Si no selecciona ninguna, se mantendrá la actual.
+            </div>
+          <% } %>
+          
+          <div class="file-input-wrapper">
+            <input 
+              type="file" 
+              id="imagen" 
+              name="imagen" 
+              accept="image/*"
+              <%= producto ? '' : 'required' %>
+              onchange="previewImage(event)"
+            >
+            <label for="imagen" class="file-input-label" id="fileLabel">
+              <span style="font-size: 48px;">📁</span>
+              <div>
+                <div style="font-weight: 600; margin-bottom: 5px;">
+                  <%= producto ? 'Cambiar imagen' : 'Seleccionar imagen' %>
+                </div>
+                <div style="font-size: 14px; color: #666;">
+                  Click para buscar o arrastra aquí (JPG, PNG, GIF, WebP)
+                </div>
+              </div>
+            </label>
+          </div>
+          
+          <div id="newPreview" class="preview-container" style="display: none;">
+            <p style="font-weight: 600; color: #4caf50; margin-bottom: 10px;">
+              ✅ Nueva imagen seleccionada:
+            </p>
+            <img id="preview" class="preview-image">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <a href="/admin/productos" style="flex: 1;">
+            <button type="button" class="btn btn-secondary" style="width: 100%;">
+              ← Cancelar
+            </button>
+          </a>
+          <button type="submit" class="btn btn-primary">
+            <%= producto ? '💾 Guardar Cambios' : '➕ Crear Producto' %>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function previewImage(event) {
+      const file = event.target.files[0];
+      const label = document.getElementById('fileLabel');
+      const preview = document.getElementById('preview');
+      const previewContainer = document.getElementById('newPreview');
+      
+      if (file) {
+        label.classList.add('has-file');
+        label.innerHTML = `
+          <span style="font-size: 48px;">✅</span>
+          <div>
+            <div style="font-weight: 600; margin-bottom: 5px;">Imagen seleccionada</div>
+            <div style="font-size: 14px; color: #4caf50;">${file.name}</div>
+          </div>
+        `;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          previewContainer.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Validación antes de enviar
+    document.querySelector('form').addEventListener('submit', function(e) {
+      const nombre = document.getElementById('nombre').value.trim();
+      const precio = parseFloat(document.getElementById('precio').value);
+      const categoria = document.getElementById('categoria').value;
+      
+      if (!nombre) {
+        e.preventDefault();
+        alert('⚠️ El nombre del producto es obligatorio');
+        return;
+      }
+      
+      if (!categoria) {
+        e.preventDefault();
+        alert('⚠️ Debe seleccionar una categoría');
+        return;
+      }
+      
+      if (precio <= 0) {
+        e.preventDefault();
+        alert('⚠️ El precio debe ser mayor a 0');
+        return;
+      }
+    });
+  </script>
+</body>
+</html>

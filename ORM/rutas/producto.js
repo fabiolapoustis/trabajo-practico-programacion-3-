@@ -24,7 +24,7 @@ router.delete("/:id", desactivarProducto); // Desactivar (baja lógica)
 router.put("/:id/activar", activarProducto); // Activar
 
 //validaciones
-router.post("/", validarProducto, crearProducto);
+router.post("/", validarProducto);
 router.put("/:id", validarProducto, modificarProducto);
 
 export default router;

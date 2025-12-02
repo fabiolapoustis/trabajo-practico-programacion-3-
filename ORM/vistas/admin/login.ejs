@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= titulo %> - P&G Petshop</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .login-container {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 420px;
+      animation: slideIn 0.5s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .logo-container {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .logo-container h1 {
+      color: #333;
+      font-size: 28px;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .logo-container p {
+      color: #666;
+      font-size: 14px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: all 0.3s;
+      outline: none;
+    }
+    
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 10px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #666;
+      border: 2px dashed #ccc;
+    }
+    
+    .btn-secondary:hover {
+      background: #e8e8e8;
+      border-color: #999;
+    }
+    
+    .error-message {
+      background: #fee;
+      color: #c33;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border-left: 4px solid #c33;
+      font-size: 14px;
+    }
+    
+    .divider {
+      text-align: center;
+      margin: 20px 0;
+      color: #999;
+      font-size: 13px;
+      position: relative;
+    }
+    
+    .divider::before,
+    .divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 40%;
+      height: 1px;
+      background: #ddd;
+    }
+    
+    .divider::before {
+      left: 0;
+    }
+    
+    .divider::after {
+      right: 0;
+    }
+    
+    .footer-text {
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
+      font-size: 12px;
+    }
+    
+    .footer-text a {
+      color: #667eea;
+      text-decoration: none;
+    }
+    
+    .footer-text a:hover {
+      text-decoration: underline;
+    }
+
+    .info-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #1565c0;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo-container">
+      <h1>🐾 P&G Petshop</h1>
+      <p>Panel de Administración</p>
+      <small style="color: #999;">Ayuso Julián - Poustis Fabiola</small>
+    </div>
+
+    <% if (error) { %>
+      <div class="error-message">
+        ⚠️ <%= error %>
+      </div>
+    <% } %>
+
+    <div class="info-box">
+      💡 <strong>Acceso rápido disponible:</strong> Usa el botón de abajo para testing
+    </div>
+
+    <form action="/admin/login" method="POST">
+      <div class="form-group">
+        <label for="email">📧 Correo electrónico</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          placeholder="tu@email.com"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="pass">🔒 Contraseña</label>
+        <input 
+          type="password" 
+          id="pass" 
+          name="pass" 
+          placeholder="••••••••"
+          required
+        >
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        Ingresar al Panel
+      </button>
+    </form>
+
+    <div class="divider">o</div>
+
+    <button type="button" class="btn btn-secondary" onclick="autocompletar()">
+      ⚡ Acceso Rápido (Testing)
+    </button>
+
+    <div class="footer-text">
+      <a href="/">← Volver al inicio</a>
+    </div>
+  </div>
+
+  <script>
+    function autocompletar() {
+      // Autocompletar con el primer usuario de la base de datos
+      document.getElementById('email').value = 'rolo_K-PO@hotmail.com';
+      document.getElementById('pass').value = 'jijo123';
+      
+      // Animación visual
+      const inputs = document.querySelectorAll('input');
+      inputs.forEach(input => {
+        input.style.background = '#e8f5e9';
+        setTimeout(() => {
+          input.style.background = 'white';
+        }, 500);
+      });
+    }
+  </script>
+</body>
+</html>

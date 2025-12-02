@@ -1,3 +1,5 @@
+import bcrypt from "bcrypt";
+
 import express from "express";
 import { sequelize } from "./db/db.js";
 import session from "express-session";
@@ -12,7 +14,6 @@ import { Usuario } from "./modelos/index.js";
 import { Producto } from "./modelos/producto.js";
 import { Venta } from "./modelos/venta.js";
 import { Venta_detalle } from "./modelos/venta_detalle.js";
-
 
 //rutas
 
@@ -56,57 +57,95 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 const initDDBB = async () => {
-  await Usuario.create({
-    nombre: "Rolito",
-    pass: "jijo123",
-    email: "rolo_K-PO@hotmail.com"
-  });
+  try {
+    console.log("🔄 Iniciando carga de seeds...");
 
-  await Usuario.create({
-    nombre: "Farruco",
-    pass: "iatusave",
-    email: "farro_olivera@live.com"
-  });
+    // Usuario 1
+    const [usuario1, creado1] = await Usuario.findOrCreate({
+      where: { email: "rolo_K-PO@hotmail.com" },
+      defaults: {
+        nombre: "Rolito",
+        pass: "jijo123",
+        email: "rolo_K-PO@hotmail.com"
+      }
+    });
 
-  await Producto.create({
-    nombre: "Peine",
-    precio: "1200",
-    descripcion: "Como peina este peine",
-    imagen: "",
-    categoria: "Gato",
-    activo: true
-  });
+    console.log(`Usuario 1 - Creado: ${creado1}, Pass en DB: ${usuario1.pass.substring(0, 30)}...`);
 
-  await Producto.create({
-    nombre: "Rasuradora",
-    precio: "3000",
-    descripcion: "Te rasuro el papo",
-    imagen: "",
-    categoria: "Perro",
-    activo: true
-  });
+    // Si el usuario ya existía con pass sin encriptar, actualizarlo
+    if (!creado1 && !usuario1.pass.startsWith("$2")) {
+      console.log("⚠️ Usuario encontrado con pass sin encriptar, actualizando...");
+      const salt = await bcrypt.genSalt(10);
+      const hashedPass = await bcrypt.hash("jijo123", salt);
+      await Usuario.update({ pass: hashedPass }, { 
+        where: { id: usuario1.id },
+        hooks: false 
+      });
+      console.log("✅ Pass actualizado correctamente");
+    }
 
-  await Producto.create({
-    nombre: "Torerita",
-    precio: "800",
-    descripcion: "Torerita beige con voladitos",
-    imagen: "",
-    categoria: "Gato",
-    activo: false
-  });
+    // Usuario 2
+    const [usuario2, creado2] = await Usuario.findOrCreate({
+      where: { email: "farro_olivera@live.com" },
+      defaults: {
+        nombre: "Farruco",
+        pass: "iatusave",
+        email: "farro_olivera@live.com"
+      }
+    });
 
-  /*await Venta.create({
-    nombre: "Josesito",
-    fecha: "12/10/2024",
-    total: 7894651.5
-  });
+    if (!creado2 && !usuario2.pass.startsWith("$2")) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPass = await bcrypt.hash("iatusave", salt);
+      await Usuario.update({ pass: hashedPass }, { 
+        where: { id: usuario2.id },
+        hooks: false 
+      });
+    }
 
-  await Venta.create({
-    nombre: "Martuli",
-    fecha: "25/09/2025",
-    total: 2364
-  })*/
-}
+    // ...resto de productos...
+    await Producto.findOrCreate({
+      where: { nombre: "Peine" },
+      defaults: {
+        nombre: "Peine",
+        precio: "1200",
+        descripcion: "Como peina este peine",
+        imagen: "",
+        categoria: "Gato",
+        activo: true
+      }
+    });
+
+    await Producto.findOrCreate({
+      where: { nombre: "Rasuradora" },
+      defaults: {
+        nombre: "Rasuradora",
+        precio: "3000",
+        descripcion: "Te rasuro el papo",
+        imagen: "",
+        categoria: "Perro",
+        activo: true
+      }
+    });
+
+    await Producto.findOrCreate({
+      where: { nombre: "Torerita" },
+      defaults: {
+        nombre: "Torerita",
+        precio: "800",
+        descripcion: "Torerita beige con voladitos",
+        imagen: "",
+        categoria: "Gato",
+        activo: false
+      }
+    });
+
+    console.log("✅ Seeds cargados correctamente");
+
+  } catch (error) {
+    console.error("❌ Error al cargar seeds:", error.message);
+  }
+};
 
 //Definicion rutas
 
@@ -129,10 +168,10 @@ sequelize
   .sync({ force: true })
   .then(() => {
     console.log("Inicializamos la base de datos");
+    return initDDBB();
   })
-  .then(()=> {
-    initDDBB()
-    console.log("Carga DDBB")
+  .then(() => {
+    console.log("Carga DDBB");
   })
   .then(() => {
     app.listen(PORT, () => {

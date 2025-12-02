@@ -2,6 +2,7 @@ import { Usuario } from "../modelos/index.js";
 import { Producto } from "../modelos/producto.js";
 import { Venta } from "../modelos/venta.js";
 
+
 export const mostrarLogin = async (req, res) => {
   try {
     if (req.session.usuario) {
@@ -19,7 +20,7 @@ export const mostrarLogin = async (req, res) => {
   }
 };
 
-export const procesarLogin = async (req, res) => {
+/*export const procesarLogin = async (req, res) => {
   try {
     const { email, pass } = req.body;
 
@@ -30,7 +31,7 @@ export const procesarLogin = async (req, res) => {
       });
     }
 
-    const usuario = await Usuario.findOne({ where: { email } });
+    const usuario = await Usuario.findOne({ where: { email: email } });
     
     if (!usuario) {
       return res.render('admin/login', {
@@ -63,7 +64,77 @@ export const procesarLogin = async (req, res) => {
       error: 'Error al procesar el login'
     });
   }
+};*/
+
+export const procesarLogin = async (req, res) => {
+  try {
+    const { email, pass } = req.body;
+
+    console.log('========== INICIO LOGIN ==========');
+    console.log('📧 Email recibido:', email);
+    console.log('🔑 Password recibido:', pass);
+    console.log('📊 Tipo de email:', typeof email);
+    console.log('📊 Tipo de pass:', typeof pass);
+
+    if (!email || !pass) {
+      console.log('❌ Faltan datos');
+      return res.render('admin/login', {
+        titulo: 'Login Administrador',
+        error: 'Email y contraseña son requeridos'
+      });
+    }
+
+    const usuario = await Usuario.findOne({ where: { email } });
+    
+    console.log('🔍 Usuario encontrado:', usuario ? 'SÍ' : 'NO');
+    
+    if (!usuario) {
+      console.log('❌ Usuario NO existe en la base de datos');
+      return res.render('admin/login', {
+        titulo: 'Login Administrador',
+        error: 'Credenciales incorrectas'
+      });
+    }
+
+    console.log('✅ Usuario encontrado:');
+    console.log('   - ID:', usuario.id);
+    console.log('   - Nombre:', usuario.nombre);
+    console.log('   - Email:', usuario.email);
+    console.log('   - Pass hash:', usuario.pass.substring(0, 30) + '...');
+
+    const passwordValido = await usuario.compararPassword(pass);
+    
+    console.log('🔐 Resultado comparación password:', passwordValido);
+
+    if (!passwordValido) {
+      console.log('❌ Password INCORRECTO');
+      return res.render('admin/login', {
+        titulo: 'Login Administrador',
+        error: 'Credenciales incorrectas'
+      });
+    }
+
+    console.log('✅ LOGIN EXITOSO');
+    
+    req.session.usuario = {
+      id: usuario.id,
+      nombre: usuario.nombre,
+      email: usuario.email
+    };
+
+    res.redirect('/admin/dashboard');
+
+  } catch (error) {
+    console.error('💥 ERROR CRÍTICO en login:', error);
+    res.status(500).render('admin/login', {
+      titulo: 'Login Administrador',
+      error: 'Error al procesar el login'
+    });
+  }
 };
+
+
+
 
 export const logout = (req, res) => {
   req.session.destroy((err) => {

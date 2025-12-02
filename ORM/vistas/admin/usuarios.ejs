@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= titulo %> - P&G Petshop</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      flex-wrap: wrap;
+    }
+    
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: white;
+    }
+    
+    .navbar-brand h1 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    .navbar-menu {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+    
+    .nav-link:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    .nav-link.active {
+      background: rgba(255,255,255,0.3);
+    }
+    
+    .user-info {
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .logout-btn {
+      background: #f44336;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+    
+    .logout-btn:hover {
+      background: #d32f2f;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    
+    .page-header {
+      margin-bottom: 30px;
+    }
+    
+    .page-header h2 {
+      color: #333;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    
+    .info-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+    
+    .info-box strong {
+      color: #1565c0;
+    }
+    
+    .usuarios-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    
+    .usuario-card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      transition: transform 0.3s;
+      border-left: 4px solid #667eea;
+    }
+    
+    .usuario-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+    
+    .usuario-avatar {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 20px;
+      color: white;
+    }
+    
+    .usuario-nombre {
+      font-size: 24px;
+      font-weight: 600;
+      color: #333;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    
+    .usuario-email {
+      color: #666;
+      text-align: center;
+      font-size: 14px;
+      word-break: break-word;
+      background: #f5f5f5;
+      padding: 8px;
+      border-radius: 8px;
+    }
+    
+    .usuario-id {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 12px;
+      color: #999;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+    
+    .empty-state h3 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    
+    .empty-state p {
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+      }
+      
+      .navbar-menu {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      .usuarios-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <span style="font-size: 32px;">🐾</span>
+      <div>
+        <h1>P&G Petshop</h1>
+        <small style="opacity: 0.9;">Panel de Administración</small>
+      </div>
+    </div>
+    
+    <div class="navbar-menu">
+      <a href="/admin/dashboard" class="nav-link">📊 Dashboard</a>
+      <a href="/admin/productos" class="nav-link">📦 Productos</a>
+      <a href="/admin/ventas" class="nav-link">💰 Ventas</a>
+      <a href="/admin/usuarios" class="nav-link active">👥 Usuarios</a>
+      
+      <div class="user-info">
+        <span>👤 <%= usuario.nombre %></span>
+        <a href="/admin/logout">
+          <button class="logout-btn">Salir</button>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h2>👥 Gestión de Usuarios</h2>
+      <p style="color: #666;">Administradores con acceso al panel</p>
+    </div>
+
+    <div class="info-box">
+      <strong>💡 Información:</strong> Estos son los usuarios administradores que tienen acceso al panel de gestión. 
+      Para crear nuevos usuarios, utiliza el endpoint de la API: <code>POST /usuario</code>
+    </div>
+
+    <% if (usuarios.length === 0) { %>
+      <div class="empty-state">
+        <div class="empty-state-icon">👥</div>
+        <h3>No hay usuarios registrados</h3>
+        <p>Crea un usuario administrador usando la API</p>
+      </div>
+    <% } else { %>
+      <div class="usuarios-grid">
+        <% usuarios.forEach(user => { %>
+          <div class="usuario-card">
+            <div class="usuario-avatar">
+              👤
+            </div>
+            <div class="usuario-nombre"><%= user.nombre %></div>
+            <div class="usuario-email">
+              📧 <%= user.email %>
+            </div>
+            <div class="usuario-id">
+              ID: #<%= user.id %>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>
