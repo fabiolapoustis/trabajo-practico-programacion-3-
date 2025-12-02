@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos - PetShop AutoServicio</title>
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🐾</div>
+            <h1 class="app-name">PetShop AutoServicio</h1>
+            <p class="authors">Desarrollado por: [Tu Nombre] & [Compañero]</p>
+            <p class="customer-name">Cliente: <span id="customerNameDisplay"></span></p>
+            <nav class="main-nav">
+                <a href="index.html">Inicio</a>
+                <a href="productos.html" class="active">Productos</a>
+                <a href="carrito.html">Carrito <span id="cartBadge" class="badge">0</span></a>
+                <a href="../admin/login" class="admin-link">Admin 🔐</a>
+            </nav>
+        </header>
+
+        <main class="products-screen">
+            <div class="welcome-message">
+                <h2>Hola <span id="customerGreeting"></span>! 👋</h2>
+                <p>Selecciona los productos que deseas comprar</p>
+            </div>
+
+            <!-- Filtros por categoría -->
+            <div class="category-filter">
+                <button class="filter-btn active" data-category="all">
+                    Todos los productos
+                </button>
+                <button class="filter-btn" data-category="Gato">
+                    🐱 Productos para Gatos
+                </button>
+                <button class="filter-btn" data-category="Perro">
+                    🐶 Productos para Perros
+                </button>
+            </div>
+
+            <!-- Loading y errores -->
+            <div id="loadingProducts" class="loading">
+                <div class="spinner"></div>
+                <p>Cargando productos...</p>
+            </div>
+
+            <div id="errorProducts" class="error-box" style="display: none;">
+                <p>❌ Error al cargar productos. Por favor intenta nuevamente.</p>
+                <button onclick="location.reload()" class="btn btn-secondary">Reintentar</button>
+            </div>
+
+            <!-- Grid de productos -->
+            <div id="productsGrid" class="products-grid"></div>
+
+            <!-- Paginación -->
+            <div id="pagination" class="pagination" style="display: none;">
+                <button id="prevPage" class="btn btn-secondary">← Anterior</button>
+                <span id="pageInfo" class="page-info">Página 1 de 1</span>
+                <button id="nextPage" class="btn btn-secondary">Siguiente →</button>
+            </div>
+
+            <!-- Botón ir al carrito -->
+            <div class="floating-cart-btn">
+                <a href="carrito.html" class="btn btn-cart">
+                    🛒 Ver Carrito (<span id="cartCount">0</span>)
+                </a>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 PetShop AutoServicio. Todos los derechos reservados.</p>
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/productos.js"></script>
+</body>
+</html>

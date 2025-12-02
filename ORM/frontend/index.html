@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido - PetShop AutoServicio</title>
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🐾</div>
+            <h1 class="app-name">PetShop AutoServicio</h1>
+            <p class="authors">Desarrollado por: [Tu Nombre] & [Compañero]</p>
+            <nav class="main-nav">
+                <a href="index.html" class="active">Inicio</a>
+                <a href="#" class="disabled">Productos</a>
+                <a href="#" class="disabled">Carrito</a>
+                <a href="./admin/login.ejs" class="admin-link">Admin 🔐</a>
+            </nav>
+        </header>
+
+        <main class="welcome-screen">
+            <div class="welcome-card">
+                <div class="welcome-icon">👋</div>
+                <h2>¡Bienvenido a PetShop!</h2>
+                <p>Tu tienda de confianza para productos de mascotas</p>
+                
+                <form id="welcomeForm" class="welcome-form">
+                    <div class="form-group">
+                        <label for="customerName">Ingresa tu nombre para continuar:</label>
+                        <input 
+                            type="text" 
+                            id="customerName" 
+                            name="customerName" 
+                            placeholder="Ej: Juan Pérez"
+                            required
+                            minlength="2"
+                            autocomplete="name"
+                        >
+                        <span class="error-message" id="nameError"></span>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        Continuar a Productos →
+                    </button>
+                </form>
+
+                <div class="theme-toggle">
+                    <button id="themeToggle" class="btn-theme">
+                        <span id="themeIcon">🌙</span>
+                        <span id="themeText">Modo Oscuro</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 PetShop AutoServicio. Todos los derechos reservados.</p>
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/bienvenida.js"></script>
+</body>
+</html>
