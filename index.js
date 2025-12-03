@@ -11,7 +11,7 @@ import multer from "multer";
 import { Usuario } from "./ORM/modelos/index.js";
 import { Producto } from "./ORM/modelos/producto.js";
 import { Venta } from "./ORM/modelos/venta.js";
-import { Venta_detalle } from "./ORM/modelos/venta_detalle.js";
+
 
 // Rutas API
 import usuarioRuta from "./ORM/rutas/usuario.js";

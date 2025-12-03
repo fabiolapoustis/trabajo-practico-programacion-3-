@@ -5,7 +5,7 @@ import { Venta } from "../modelos/venta.js";
 // LOGIN
 export const mostrarLogin = async (req, res) => {
   try {
-    if (req.session.usuario) return res.redirect('/dashboard');
+    if (req.session.usuario) return res.redirect('/admin/dashboard');  // ✅ CAMBIO
     res.render('login', { titulo: 'Login Administrador', error: null });
   } catch (error) {
     res.status(500).render('login', { titulo: 'Login Administrador', error: 'Error al cargar la página' });
@@ -25,7 +25,7 @@ export const procesarLogin = async (req, res) => {
     if (!passwordValido) return res.render('login', { titulo: 'Login Administrador', error: 'Credenciales CONTRASEÑA incorrectas' });
 
     req.session.usuario = { id: usuario.id, nombre: usuario.nombre, email: usuario.email };
-    res.redirect('/dashboard');
+    res.redirect('/admin/dashboard');  // ✅ CAMBIO
   } catch (error) {
     console.error('ERROR LOGIN:', error);
     res.status(500).render('login', { titulo: 'Login Administrador', error: 'Error al procesar el login' });
@@ -35,7 +35,7 @@ export const procesarLogin = async (req, res) => {
 export const logout = (req, res) => {
   req.session.destroy(err => {
     if (err) console.error('Error cerrar sesión:', err);
-    res.redirect('/login');
+    res.redirect('/admin/login');
   });
 };
 
