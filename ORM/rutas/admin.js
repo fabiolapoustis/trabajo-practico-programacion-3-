@@ -18,19 +18,23 @@ import { upload } from "../middlewares/upload.js";
 
 const router = Router();
 
+// Middleware para proteger rutas
 const verificarAuth = (req, res, next) => {
   if (!req.session.usuario) {
-    return res.redirect('/admin/login');
+    return res.redirect('/login'); // redirige al login si no hay sesión
   }
   next();
 };
 
+// --- RUTAS LOGIN ---
 router.get("/login", mostrarLogin);
 router.post("/login", procesarLogin);
 router.get("/logout", logout);
 
+// --- RUTAS DASHBOARD ---
 router.get("/dashboard", verificarAuth, mostrarDashboard);
 
+// --- RUTAS PRODUCTOS ---
 router.get("/productos", verificarAuth, mostrarProductos);
 router.get("/productos/crear", verificarAuth, mostrarFormularioCrear);
 router.post("/productos/crear", verificarAuth, upload.single('imagen'), crearProductoHTML);
@@ -39,8 +43,10 @@ router.post("/productos/editar/:id", verificarAuth, upload.single('imagen'), edi
 router.post("/productos/desactivar/:id", verificarAuth, desactivarProductoHTML);
 router.post("/productos/activar/:id", verificarAuth, activarProductoHTML);
 
+// --- RUTAS VENTAS ---
 router.get("/ventas", verificarAuth, mostrarVentas);
 
+// --- RUTAS USUARIOS ---
 router.get("/usuarios", verificarAuth, mostrarUsuarios);
 
 export default router;

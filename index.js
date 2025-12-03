@@ -37,6 +37,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+// Esto trae y muestra el formulario de login
+export const mostrarLogin = (req, res) => {
+  res.render("login", { titulo: "Login", error: null });
+};
+
+
 app.use(
   session({
     secret: "tu_secreto_super_seguro_cambialo",
