@@ -21,7 +21,8 @@ export const procesarLogin = async (req, res) => {
     if (!usuario) return res.render('login', { titulo: 'Login Administrador', error: 'Credenciales incorrectas' });
 
     const passwordValido = await usuario.compararPassword(pass);
-    if (!passwordValido) return res.render('login', { titulo: 'Login Administrador', error: 'Credenciales incorrectas' });
+    
+    if (!passwordValido) return res.render('login', { titulo: 'Login Administrador', error: 'Credenciales CONTRASEÑA incorrectas' });
 
     req.session.usuario = { id: usuario.id, nombre: usuario.nombre, email: usuario.email };
     res.redirect('/dashboard');

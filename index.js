@@ -90,7 +90,7 @@ const initDDBB = async () => {
     where: { email: "admin@tienda.com" },
     defaults: {
       nombre: "Administrador",
-      pass: await bcrypt.hash("admin123", 10),
+      pass: "admin123"
     },
   });
 
