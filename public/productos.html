@@ -74,8 +74,68 @@
             <p>&copy; 2025 PetShop AutoServicio. Todos los derechos reservados.</p>
         </footer>
     </div>
+    <script>
+const productsGrid = document.getElementById("productsGrid");
+const loading = document.getElementById("loadingProducts");
+const errorBox = document.getElementById("errorProducts");
+
+async function cargarProductos(categoria = "all") {
+    loading.style.display = "block";
+    errorBox.style.display = "none";
+    productsGrid.innerHTML = "";
+
+    let url = "/api/productos/activos"; 
+    if (categoria !== "all") url += `?categoria=${categoria}`;
+
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+        const productos = data.productos;
+
+        if (productos.length === 0) {
+            productsGrid.innerHTML = "<p>No hay productos disponibles.</p>";
+        }
+
+        productos.forEach(p => {
+            const div = document.createElement("div");
+            div.classList.add("product-card");
+            div.innerHTML = `
+                <img src="${p.imagen || 'default.png'}" alt="${p.nombre}">
+                <h3>${p.nombre}</h3>
+                <p>${p.descripcion}</p>
+                <p>Precio: $${p.precio}</p>
+                <button class="btn btn-primary" onclick="agregarAlCarrito(${p.id})">Agregar al carrito</button>
+            `;
+            productsGrid.appendChild(div);
+        });
+
+        loading.style.display = "none";
+    } catch (err) {
+        console.error(err);
+        loading.style.display = "none";
+        errorBox.style.display = "block";
+    }
+}
+
+// Filtrar por categoría
+document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        cargarProductos(btn.dataset.category);
+    });
+});
+
+// Llamar al cargar la página
+cargarProductos();
+
+function agregarAlCarrito(id) {
+    console.log("Producto agregado al carrito:", id);
+}
+</script>
 
     <script src="js/config.js"></script>
-    <script src="js/productos.js"></script>
+    <script src="ORM/js/productos.js"></script>
+
 </body>
 </html>

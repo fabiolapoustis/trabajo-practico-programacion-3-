@@ -41,7 +41,7 @@ Usuario.prototype.compararPassword = async function(passIngresado) {
 
 import { DataTypes } from "sequelize";
 // ...existing code...
-import { sequelize } from "../db/db.js";
+import { sequelize } from "../db/conexiondb.js";
 import bcrypt from "bcrypt";
 
 export const Usuario = sequelize.define("usuario", {

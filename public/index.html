@@ -17,7 +17,8 @@
                 <a href="index.html" class="active">Inicio</a>
                 <a href="#" class="disabled">Productos</a>
                 <a href="#" class="disabled">Carrito</a>
-                <a href="./admin/login.ejs" class="admin-link">Admin 🔐</a>
+                <a href="/admin/login" class="admin-link">Admin 🔐</a>
+
             </nav>
         </header>
 
@@ -42,16 +43,16 @@
                         <span class="error-message" id="nameError"></span>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary">
+                    <button type="button" class="btn btn-primary" onclick="window.location.href='productos.html'">
                         Continuar a Productos →
                     </button>
-                </form>
-
-                <div class="theme-toggle">
-                    <button id="themeToggle" class="btn-theme">
-                        <span id="themeIcon">🌙</span>
-                        <span id="themeText">Modo Oscuro</span>
-                    </button>
+                    
+                    <div class="theme-toggle">
+                        <button id="themeToggle" class="btn-theme">
+                            <span id="themeIcon">🌙</span>
+                            <span id="themeText">Modo Oscuro</span>
+                        </button>
+                    </form>
                 </div>
             </div>
         </main>
@@ -62,6 +63,9 @@
     </div>
 
     <script src="js/config.js"></script>
-    <script src="js/bienvenida.js"></script>
+    <script src="/orm/js/bienvenidos.js"></script>
+
+
+    
 </body>
 </html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>P&G Petshop</title>
+  <style>
+    /* --- TODO TU CSS SIN CAMBIOS --- */
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <span style="font-size: 32px;">🐾</span>
+      <div>
+        <h1>P&G Petshop</h1>
+        <small style="opacity: 0.9;">Panel de Administración</small>
+      </div>
+    </div>
+
+    <div class="user-info">
+      👤 Admin
+      <!-- Se quita usuario.nombre porque no existe -->
+      <a href="/">
+        <button class="logout-btn">Volver a Inicio</button>
+      </a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h2>📦 Gestión de Productos</h2>
+      <a href="/cargarproducto" class="btn btn-primary">
+        ➕ Agregar Producto
+      </a>
+    </div>
+
+    <% const lista = productos || []; %> <!-- Seguridad -->
+
+    <% if (lista.length === 0) { %>
+      <div class="empty-state">
+        <div class="empty-state-icon">📦</div>
+        <h3>No hay productos registrados</h3>
+        <a href="/cargarproducto" class="btn btn-primary">
+          ➕ Agregar Producto
+        </a>
+      </div>
+    <% } else { %>
+
+    <div class="productos-grid">
+      <% lista.forEach(producto => { %>
+        <% const activo = producto.activo ?? true; %> <!-- Por defecto activo -->
+        <div class="producto-card">
+          
+          <% if (producto.imagen) { %>
+            <img src="/uploads/<%= producto.imagen %>" class="producto-imagen">
+          <% } else { %>
+            <div class="producto-imagen"
+                 style="display:flex;align-items:center;justify-content:center;font-size:48px;">
+              🐾
+            </div>
+          <% } %>
+
+          <div class="producto-info">
+            
+            <div class="producto-nombre"><%= producto.nombre %></div>
+            <div class="producto-precio">$<%= producto.precio %></div>
+
+            <div>
+              <span class="producto-categoria">
+                Categoría: <%= producto.categoria || "Sin categoría" %>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      <% }); %>
+    </div>
+
+    <% } %>
+
+  </div>
+
+</body>
+</html>
