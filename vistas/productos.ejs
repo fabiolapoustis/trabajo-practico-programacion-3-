@@ -126,7 +126,6 @@
   </style>
 </head>
 <body>
-
   <nav class="navbar">
     <div class="navbar-brand">
       <span style="font-size: 32px;">🐾</span>
@@ -135,20 +134,26 @@
         <small style="opacity: 0.9;">Panel de Administración</small>
       </div>
     </div>
-
-    <div class="user-info">
-      👤 Admin
-      <!-- Se quita usuario.nombre porque no existe -->
-      <a href="/">
-        <button class="logout-btn">Volver a Inicio</button>
-      </a>
+    
+    <div class="navbar-menu">
+      <a href="/admin/dashboard" class="nav-link">📊 Dashboard</a>
+      <a href="/admin/productos" class="nav-link active">📦 Productos</a>
+      <a href="/admin/ventas" class="nav-link">💰 Ventas</a>
+      <a href="/admin/usuarios" class="nav-link">👥 Usuarios</a>
+      
+      <div class="user-info">
+        <span>👤 <%= usuario.nombre %></span>
+        <a href="/admin/logout">
+          <button class="logout-btn">Salir</button>
+        </a>
+      </div>
     </div>
   </nav>
 
   <div class="container">
     <div class="page-header">
       <h2>📦 Gestión de Productos</h2>
-      <a href="/admin/producto-form" class="btn btn-primary">
+      <a href="/admin/productos/crear" class="btn btn-primary">
         ➕ Agregar Producto
       </a>
     </div>
@@ -159,7 +164,7 @@
       <div class="empty-state">
         <div class="empty-state-icon">📦</div>
         <h3>No hay productos registrados</h3>
-        <a href="/admin/producto-form" class="btn btn-primary">
+        <a href="/admin/productos/crear" class="btn btn-primary">
           ➕ Agregar Producto
         </a>
       </div>
