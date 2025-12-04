@@ -101,7 +101,7 @@ export const crearProductoHTML = async (req, res) => {
     if (!nombre || !precio || !categoria) return res.render('producto-form', { titulo: 'Agregar Producto', usuario: req.session.usuario, producto: null, error: 'Nombre, precio y categoría son obligatorios' });
 
     await Producto.create({ nombre, precio: parseFloat(precio), descripcion: descripcion || '', imagen, categoria, activo: true });
-    res.redirect('/productos');
+    res.redirect('/admin/productos'); //agregue /admin
   } catch (error) {
     console.error('Error crear producto:', error);
     res.render('producto-form', { titulo: 'Agregar Producto', usuario: req.session.usuario, producto: null, error: 'Error al crear el producto' });
