@@ -25,17 +25,13 @@ export const Usuario = sequelize.define("usuario", {
 }, {
   hooks: {
     beforeCreate: async (usuario) => {
-      console.log('🔐 beforeCreate - Pass ANTES:', usuario.pass);
       const salt = await bcrypt.genSalt(10);
       usuario.pass = await bcrypt.hash(usuario.pass, salt);
-      console.log('🔐 beforeCreate - Pass DESPUÉS:', usuario.pass);
     },
     beforeUpdate: async (usuario) => {
       if (usuario.changed('pass')) {
-        console.log('🔐 beforeUpdate - Pass ANTES:', usuario.pass);
         const salt = await bcrypt.genSalt(10);
         usuario.pass = await bcrypt.hash(usuario.pass, salt);
-        console.log('🔐 beforeUpdate - Pass DESPUÉS:', usuario.pass);
       }
     }
   }
