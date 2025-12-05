@@ -51,7 +51,6 @@ function renderizarCarrito() {
         const itemTotal = item.precio * item.cantidad;
         subtotal += itemTotal;
         
-        // ✅ Construir la ruta correcta de la imagen
         const imagenUrl = item.imagen && item.imagen !== 'default.png' 
             ? `/uploads/${item.imagen}` 
             : 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><text y="50%" x="50%" text-anchor="middle" font-size="80">🐾</text></svg>';
@@ -161,7 +160,6 @@ async function confirmarCompra() {
             
             localStorage.setItem('ultimaVenta', JSON.stringify(ventaInfo));
             
-            alert('¡Compra realizada exitosamente!');
             localStorage.removeItem('carrito');
             carrito = [];
             document.getElementById('confirmModal').style.display = 'none';
