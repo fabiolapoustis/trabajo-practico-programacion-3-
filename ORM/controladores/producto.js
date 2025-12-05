@@ -1,11 +1,54 @@
 import { Producto } from "../modelos/index.js";
 
+export const crearProducto = async (req, res) => {
+    try {
+        const { nombre, precio, descripcion, categoria } = req.body;
+        
+        // ✅ Guardar SOLO el nombre del archivo (sin /uploads/)
+        const imagen = req.file ? req.file.filename : '';
+
+        if (!nombre || !precio || !categoria) {
+            return res.status(400).json({ 
+                error: "Nombre, precio y categoría son obligatorios" 
+            });
+        }
+        if (precio <= 0) {
+            return res.status(400).json({ 
+                error: "El precio debe ser mayor a 0" 
+            });
+        }
+        if (categoria !== "Gato" && categoria !== "Perro") {
+            return res.status(400).json({ 
+                error: "La categoría debe ser 'Gato' o 'Perro'" 
+            });
+        }
+        
+        const producto = await Producto.create({
+            nombre,
+            precio,
+            descripcion: descripcion || "",
+            imagen,
+            categoria,
+            activo: true
+        });
+        
+        console.log('✅ Producto creado:', producto.id, 'Imagen:', imagen);
+        
+        res.status(201).json({
+            mensaje: "Producto creado exitosamente",
+            producto
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
 export const getProducto = async (req, res) => {
     try {
         const { page = 1, limit = 10, categoria, activo } = req.query;
         
         const offset = (page - 1) * limit;
-        //
         const where = {};
         if (categoria) where.categoria = categoria;
         if (activo !== undefined) where.activo = activo === 'true';
@@ -27,7 +70,6 @@ export const getProducto = async (req, res) => {
     }
 };
 
-
 export const getProductoPorId = async (req, res) => {
     try {
         const { id } = req.params;
@@ -41,60 +83,26 @@ export const getProductoPorId = async (req, res) => {
     }
 };
 
-
-export const crearProducto = async (req, res) => {
-    try {
-        const { nombre, precio, descripcion, imagen, categoria } = req.body;
-        if (!nombre || !precio || !categoria) {
-            return res.status(400).json({ 
-                error: "Nombre, precio y categoría son obligatorios" 
-            });
-        }
-        if (precio <= 0) {
-            return res.status(400).json({ 
-                error: "El precio debe ser mayor a 0" 
-            });
-        }
-        if (categoria !== "Gato" && categoria !== "Perro") {
-            return res.status(400).json({ 
-                error: "La categoría debe ser 'Gato' o 'Perro'" 
-            });
-        }
-        const producto = await Producto.create({
-            nombre,
-            precio,
-            descripcion: descripcion || "",
-            imagen: imagen || "",
-            categoria,
-            activo: true
-        });
-        res.status(201).json({
-            mensaje: "Producto creado exitosamente",
-            producto
-        });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
 export const modificarProducto = async (req, res) => {
     try {
         const { id } = req.params;
-        const { nombre, precio, descripcion, imagen, categoria, activo } = req.body;
+        const { nombre, precio, descripcion, categoria, activo } = req.body;
 
         const producto = await Producto.findByPk(id);
         if (!producto) {
             return res.status(404).json({ error: "Producto no encontrado" });
         }
+        
         if (precio !== undefined && precio <= 0) {
             return res.status(400).json({ 
                 error: "El precio debe ser mayor a 0" 
             });
         }
+        
         if (nombre !== undefined) producto.nombre = nombre;
         if (precio !== undefined) producto.precio = precio;
         if (descripcion !== undefined) producto.descripcion = descripcion;
-        if (imagen !== undefined) producto.imagen = imagen;
+        if (req.file) producto.imagen = req.file.filename;  // ✅ SI VIENE NUEVO ARCHIVO
         if (categoria !== undefined) producto.categoria = categoria;
         if (activo !== undefined) producto.activo = activo;
 
@@ -143,7 +151,6 @@ export const activarProducto = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
 
 export const getProductosActivos = async (req, res) => {
     try {

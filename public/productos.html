@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos - PetShop AutoServicio</title>
+    <title>Productos - P&G Petshop</title>
     <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,14 +11,14 @@
     <div class="container">
         <header>
             <div class="logo">🐾</div>
-            <h1 class="app-name">PetShop AutoServicio</h1>
-            <p class="authors">Desarrollado por: [Tu Nombre] & [Compañero]</p>
+            <h1 class="app-name">P&G Petshop</h1>
+            <p class="authors">Desarrollado por: Fabiola Poustis & Julian Ayuso</p>
             <p class="customer-name">Cliente: <span id="customerNameDisplay"></span></p>
             <nav class="main-nav">
                 <a href="index.html">Inicio</a>
                 <a href="productos.html" class="active">Productos</a>
                 <a href="carrito.html">Carrito <span id="cartBadge" class="badge">0</span></a>
-                <a href="C:\Users\fabiola\Desktop\trabajo programacion 3\vistas\inicioadmin.ejs" class="admin-link">Admin 🔐</a>
+                <!-- <a href="/admin/login" class="admin-link">Admin 🔐</a> -->
             </nav>
         </header>
 
@@ -75,6 +75,7 @@
         </footer>
     </div>
     <script>
+let productosDisponibles = [];
 const productsGrid = document.getElementById("productsGrid");
 const loading = document.getElementById("loadingProducts");
 const errorBox = document.getElementById("errorProducts");
@@ -92,6 +93,8 @@ async function cargarProductos(categoria = "all") {
         const data = await res.json();
         const productos = data.productos;
 
+        productosDisponibles = productos;
+
         if (productos.length === 0) {
             productsGrid.innerHTML = "<p>No hay productos disponibles.</p>";
         }
@@ -100,7 +103,7 @@ async function cargarProductos(categoria = "all") {
             const div = document.createElement("div");
             div.classList.add("product-card");
             div.innerHTML = `
-                <img src="${p.imagen || 'default.png'}" alt="${p.nombre}">
+                <img class="product-image" src="${p.imagen || 'default.png'}" alt="${p.nombre}">
                 <h3>${p.nombre}</h3>
                 <p>${p.descripcion}</p>
                 <p>Precio: $${p.precio}</p>
@@ -126,16 +129,62 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
     });
 });
 
-// Llamar al cargar la página
-cargarProductos();
-
-function agregarAlCarrito(id) {
-    console.log("Producto agregado al carrito:", id);
+async function agregarAlCarrito(idProducto) {
+    try {
+        // Buscar el producto en el array que ya cargamos
+        const producto = productosDisponibles.find(p => p.id === idProducto);
+        
+        if (!producto) {
+            alert('❌ Producto no encontrado');
+            return;
+        }
+        
+        // Obtener carrito actual del localStorage
+        let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+        
+        // Buscar si el producto ya existe
+        const productoExistente = carrito.find(item => item.id === idProducto);
+        
+        if (productoExistente) {
+            productoExistente.cantidad++;
+        } else {
+            carrito.push({
+                id: producto.id,
+                nombre: producto.nombre,
+                precio: producto.precio,
+                imagen: producto.imagen || 'default.png',
+                cantidad: 1
+            });
+        }
+        
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        actualizarBadgeCarrito();
+        alert(`✅ ${producto.nombre} agregado al carrito!`);
+        
+    } catch (err) {
+        console.error('Error:', err);
+        alert('❌ Error al agregar al carrito');
+    }
 }
+
+function actualizarBadgeCarrito() {
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const cantidad = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+    
+    const badge = document.getElementById('cartBadge');
+    const cartCount = document.getElementById('cartCount');
+    
+    if (badge) badge.textContent = cantidad;
+    if (cartCount) cartCount.textContent = cantidad;
+}
+
+cargarProductos();
+actualizarBadgeCarrito();
+
 </script>
 
-    <script src="js/config.js"></script>
-    <script src="ORM/js/productos.js"></script>
+<script src="js/config.js"></script>
+<script src="js/productos.js"></script>
 
 </body>
 </html>

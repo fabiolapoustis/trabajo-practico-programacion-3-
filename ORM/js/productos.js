@@ -1,4 +1,3 @@
-// productos.js
 let todosLosProductos = [];
 let productosFiltrados = [];
 let paginaActual = 1;

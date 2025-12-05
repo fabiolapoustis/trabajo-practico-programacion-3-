@@ -209,6 +209,9 @@
   </style>
 </head>
 <body>
+
+  
+
   <nav class="navbar">
     <div class="navbar-brand">
       <span style="font-size: 32px;">🐾</span>
@@ -239,11 +242,6 @@
       <p style="color: #666;">Administradores con acceso al panel</p>
     </div>
 
-    <div class="info-box">
-      <strong>💡 Información:</strong> Estos son los usuarios administradores que tienen acceso al panel de gestión. 
-      Para crear nuevos usuarios, utiliza el endpoint de la API: <code>POST /usuario</code>
-    </div>
-
     <% if (usuarios.length === 0) { %>
       <div class="empty-state">
         <div class="empty-state-icon">👥</div>
@@ -268,6 +266,112 @@
         <% }) %>
       </div>
     <% } %>
+
+    <div class="page-header">
+      <button onclick="abrirFormularioUsuario()" class="btn-crear" style="margin-top: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+      ➕ Crear Nuevo Usuario
+      </button>
   </div>
+  </div>
+  <div id="modalUsuario" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+  <div style="background: white; padding: 40px; border-radius: 15px; max-width: 400px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+    <h3 style="margin-bottom: 20px; color: #333;">➕ Crear Nuevo Usuario Administrador</h3>
+    
+    <form id="formUsuario" onsubmit="crearUsuario(event)">
+      <div style="margin-bottom: 15px;">
+        <label style="display: block; margin-bottom: 5px; color: #333; font-weight: 600;">Nombre:</label>
+        <input type="text" id="nombreUsuario" placeholder="Ej: Juan Pérez" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        <label style="display: block; margin-bottom: 5px; color: #333; font-weight: 600;">Email:</label>
+        <input type="email" id="emailUsuario" placeholder="Ej: juan@example.com" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 5px; color: #333; font-weight: 600;">Contraseña:</label>
+        <input type="password" id="passUsuario" placeholder="Contraseña segura" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button type="submit" style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+          ✅ Crear Usuario
+        </button>
+        <button type="button" onclick="cerrarFormularioUsuario()" style="flex: 1; background: #f0f0f0; color: #333; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+          ❌ Cancelar
+        </button>
+      </div>
+    </form>
+
+    <div id="mensajeUsuario" style="margin-top: 15px; padding: 12px; border-radius: 8px; display: none; text-align: center; font-weight: 600;"></div>
+  </div>
+</div>
+
+  <script>
+function abrirFormularioUsuario() {
+  document.getElementById('modalUsuario').style.display = 'flex';
+}
+
+function cerrarFormularioUsuario() {
+  document.getElementById('modalUsuario').style.display = 'none';
+  document.getElementById('formUsuario').reset();
+  document.getElementById('mensajeUsuario').style.display = 'none';
+}
+
+async function crearUsuario(event) {
+  event.preventDefault();
+  
+  const nombre = document.getElementById('nombreUsuario').value;
+  const email = document.getElementById('emailUsuario').value;
+  const pass = document.getElementById('passUsuario').value;
+  
+  const mensajeBox = document.getElementById('mensajeUsuario');
+  
+  try {
+    const res = await fetch('/api/usuarios', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ nombre, email, pass })
+    });
+    
+    const data = await res.json();
+    
+    if (res.ok) {
+      mensajeBox.style.background = '#d4edda';
+      mensajeBox.style.color = '#155724';
+      mensajeBox.textContent = '✅ Usuario creado exitosamente';
+      mensajeBox.style.display = 'block';
+      
+      setTimeout(() => {
+        location.reload();
+      }, 1500);
+    } else {
+      mensajeBox.style.background = '#f8d7da';
+      mensajeBox.style.color = '#721c24';
+      mensajeBox.textContent = '❌ Error: ' + (data.error || 'No se pudo crear el usuario');
+      mensajeBox.style.display = 'block';
+    }
+  } catch (err) {
+    console.error('Error:', err);
+    mensajeBox.style.background = '#f8d7da';
+    mensajeBox.style.color = '#721c24';
+    mensajeBox.textContent = '❌ Error al crear usuario';
+    mensajeBox.style.display = 'block';
+  }
+}
+
+// Cerrar modal si hace clic fuera de él
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('modalUsuario').addEventListener('click', (e) => {
+    if (e.target.id === 'modalUsuario') {
+      cerrarFormularioUsuario();
+    }
+  });
+});
+</script>
+
+
 </body>
 </html>

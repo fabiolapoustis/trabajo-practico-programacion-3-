@@ -54,7 +54,9 @@ app.use(
 );
 
 // Archivos estáticos
+//app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, "public")));
+app.use('/ORM', express.static(path.join(__dirname, 'ORM')));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Configuración Multer
@@ -76,7 +78,7 @@ app.get("/productos.html", (req, res) => {
 
 // Rutas API
 app.use("/api/usuarios", usuarioRuta);
-app.use("/api/ventas", ventaRuta);
+app.use("/api/venta", ventaRuta);  
 app.use("/api/productos", productoRuta);
 
 // Rutas Admin
