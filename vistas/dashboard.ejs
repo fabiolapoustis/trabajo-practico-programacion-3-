@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= titulo %> - P&G Petshop</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>">
   <style>
     * {
       margin: 0;
@@ -16,7 +17,6 @@
       background: #f5f5f5;
     }
     
-    /* NAVBAR */
     .navbar {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       padding: 15px 30px;
@@ -68,7 +68,6 @@
       gap: 10px;
     }
     
-    /* CONTENIDO */
     .container {
       max-width: 1200px;
       margin: 30px auto;
@@ -90,7 +89,6 @@
       font-size: 16px;
     }
     
-    /* TARJETAS DE ESTADÍSTICAS */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -215,7 +213,6 @@
   </style>
 </head>
 <body>
-  <!-- NAVBAR -->
   <nav class="navbar">
     <div class="navbar-brand">
       <span style="font-size: 32px;">🐾</span>
@@ -240,14 +237,14 @@
     </div>
   </nav>
 
-  <!-- CONTENIDO -->
+
   <div class="container">
     <div class="page-header">
       <h2>📊 Dashboard</h2>
       <p>Bienvenido <%= usuario.nombre %>, aquí tienes un resumen de tu tienda</p>
     </div>
 
-    <!-- ESTADÍSTICAS -->
+
     <div class="stats-grid">
       <div class="stat-card productos">
         <div class="stat-icon">📦</div>
@@ -286,7 +283,6 @@
       </div>
     </div>
 
-    <!-- ACCIONES RÁPIDAS -->
     <div class="quick-actions">
       <h3>⚡ Acciones Rápidas</h3>
       <div class="actions-grid">

@@ -4,7 +4,6 @@ export const crearProducto = async (req, res) => {
     try {
         const { nombre, precio, descripcion, categoria } = req.body;
         
-        // ✅ Guardar SOLO el nombre del archivo (sin /uploads/)
         const imagen = req.file ? req.file.filename : '';
 
         if (!nombre || !precio || !categoria) {
@@ -32,7 +31,7 @@ export const crearProducto = async (req, res) => {
             activo: true
         });
         
-        console.log('✅ Producto creado:', producto.id, 'Imagen:', imagen);
+        console.log('Producto creado:', producto.id, 'Imagen:', imagen);
         
         res.status(201).json({
             mensaje: "Producto creado exitosamente",
@@ -102,7 +101,7 @@ export const modificarProducto = async (req, res) => {
         if (nombre !== undefined) producto.nombre = nombre;
         if (precio !== undefined) producto.precio = precio;
         if (descripcion !== undefined) producto.descripcion = descripcion;
-        if (req.file) producto.imagen = req.file.filename;  // ✅ SI VIENE NUEVO ARCHIVO
+        if (req.file) producto.imagen = req.file.filename; 
         if (categoria !== undefined) producto.categoria = categoria;
         if (activo !== undefined) producto.activo = activo;
 

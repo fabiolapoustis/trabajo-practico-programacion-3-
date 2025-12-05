@@ -5,7 +5,7 @@ import { Venta } from "../modelos/venta.js";
 // LOGIN
 export const mostrarLogin = async (req, res) => {
   try {
-    if (req.session.usuario) return res.redirect('/admin/dashboard');  // ✅ CAMBIO
+    if (req.session.usuario) return res.redirect('/admin/dashboard'); 
     res.render('login', { titulo: 'Login Administrador', error: null });
   } catch (error) {
     res.status(500).render('login', { titulo: 'Login Administrador', error: 'Error al cargar la página' });
@@ -25,7 +25,7 @@ export const procesarLogin = async (req, res) => {
     if (!passwordValido) return res.render('login', { titulo: 'Login Administrador', error: 'Credenciales CONTRASEÑA incorrectas' });
 
     req.session.usuario = { id: usuario.id, nombre: usuario.nombre, email: usuario.email };
-    res.redirect('/admin/dashboard');  // ✅ CAMBIO
+    res.redirect('/admin/dashboard'); 
   } catch (error) {
     console.error('ERROR LOGIN:', error);
     res.status(500).render('login', { titulo: 'Login Administrador', error: 'Error al procesar el login' });
@@ -101,7 +101,7 @@ export const crearProductoHTML = async (req, res) => {
     if (!nombre || !precio || !categoria) return res.render('producto-form', { titulo: 'Agregar Producto', usuario: req.session.usuario, producto: null, error: 'Nombre, precio y categoría son obligatorios' });
 
     await Producto.create({ nombre, precio: parseFloat(precio), descripcion: descripcion || '', imagen, categoria, activo: true });
-    res.redirect('/admin/productos'); //agregue /admin
+    res.redirect('/admin/productos');
   } catch (error) {
     console.error('Error crear producto:', error);
     res.render('producto-form', { titulo: 'Agregar Producto', usuario: req.session.usuario, producto: null, error: 'Error al crear el producto' });

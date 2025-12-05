@@ -6,16 +6,15 @@ const productosPorPagina = 6;
 const API_ENDPOINTS = {
     productosActivos: 'http://localhost:3000/api/productos'
 };
-const API_URL = 'http://localhost:3000/uploads/'; // carpeta de imágenes
+const API_URL = 'http://localhost:3000/uploads/';
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🛍️ Productos.js cargado');
+    console.log('Productos.js cargado');
     cargarProductos();
     setupFiltros();
     setupPaginacion();
 });
 
-// Cargar productos
 async function cargarProductos() {
     const loading = document.getElementById('loadingProducts');
     const errorBox = document.getElementById('errorProducts');
@@ -42,7 +41,7 @@ async function cargarProductos() {
         loading.style.display = 'none';
         errorBox.style.display = 'block';
         errorBox.innerHTML = `
-            <p>❌ Error al cargar productos: ${err.message}</p>
+            <p> Error al cargar productos: ${err.message}</p>
             <button onclick="cargarProductos()">Reintentar</button>
         `;
     }
@@ -59,7 +58,6 @@ function mostrarMensajeVacio() {
     grid.style.display = 'grid';
 }
 
-// Filtros
 function setupFiltros() {
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => btn.addEventListener('click', () => {
@@ -78,7 +76,6 @@ function filtrarProductos(categoria) {
     renderizarProductos();
 }
 
-// Renderizado con paginación
 function renderizarProductos() {
     const grid = document.getElementById('productsGrid');
     grid.innerHTML = '';
@@ -106,7 +103,6 @@ function renderizarProductos() {
     actualizarPaginacion();
 }
 
-// Paginación
 function setupPaginacion() {
     const prev = document.getElementById('prevPage');
     const next = document.getElementById('nextPage');

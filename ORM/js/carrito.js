@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cargarCarrito();
     renderizarCarrito();
     
-    // Setup botones
+
     const finalizarBtn = document.getElementById('finalizarCompra');
     if (finalizarBtn) {
         finalizarBtn.addEventListener('click', procesarCompra);
@@ -27,55 +27,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function cargarCarrito() {
     carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-    console.log('📦 Carrito cargado:', carrito);
+    console.log('Carrito cargado:', carrito);
 }
 
 function renderizarCarrito() {
-    const emptyCart = document.getElementById('emptyCart');
-    const cartWithItems = document.getElementById('cartWithItems');
-    const cartItemsContainer = document.getElementById('cartItems');
-
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    
     if (carrito.length === 0) {
-        if (emptyCart) emptyCart.style.display = 'block';
-        if (cartWithItems) cartWithItems.style.display = 'none';
-        console.log('🛒 Carrito vacío');
+        document.getElementById('emptyCart').style.display = 'block';
+        document.getElementById('cartWithItems').style.display = 'none';
         return;
     }
-
-    if (emptyCart) emptyCart.style.display = 'none';
-    if (cartWithItems) cartWithItems.style.display = 'block';
-
-    if (!cartItemsContainer) return;
-
+    
+    document.getElementById('emptyCart').style.display = 'none';
+    document.getElementById('cartWithItems').style.display = 'block';
+    
+    const cartItemsContainer = document.getElementById('cartItems');
     cartItemsContainer.innerHTML = '';
-
+    
+    let subtotal = 0;
+    
     carrito.forEach((item, index) => {
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'cart-item';
-        itemDiv.innerHTML = `
-            <img src="${item.imagen || 'default.png'}" alt="${item.nombre}" class="cart-item-image">
-            
+        const itemTotal = item.precio * item.cantidad;
+        subtotal += itemTotal;
+        
+        // ✅ Construir la ruta correcta de la imagen
+        const imagenUrl = item.imagen && item.imagen !== 'default.png' 
+            ? `/uploads/${item.imagen}` 
+            : 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><text y="50%" x="50%" text-anchor="middle" font-size="80">🐾</text></svg>';
+        
+        const cartItem = document.createElement('div');
+        cartItem.className = 'cart-item';
+        cartItem.innerHTML = `
+            <img src="${imagenUrl}" 
+                 alt="${item.nombre}" 
+                 class="cart-item-image"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22><text y=%2250%25%22 x=%2250%25%22 text-anchor=%22middle%22 font-size=%2280%22>🐾</text></svg>'">
             <div class="cart-item-details">
                 <h3>${item.nombre}</h3>
-                <p>Precio: $${parseFloat(item.precio).toFixed(2)}</p>
+                <p class="cart-item-price">$${parseFloat(item.precio).toFixed(2)}</p>
             </div>
-
             <div class="cart-item-controls">
-                <div class="quantity-control">
-                    <button class="quantity-btn" onclick="cambiarCantidad(${index}, -1)">-</button>
-                    <span>${item.cantidad}</span>
-                    <button class="quantity-btn" onclick="cambiarCantidad(${index}, 1)">+</button>
-                </div>
-                <div>
-                    <strong>Subtotal: $${(item.precio * item.cantidad).toFixed(2)}</strong>
-                </div>
-                <button class="btn btn-danger" onclick="eliminarDelCarrito(${index})">🗑️ Eliminar</button>
+                <button class="btn-qty" onclick="cambiarCantidad(${index}, -1)">−</button>
+                <span class="item-quantity">${item.cantidad}</span>
+                <button class="btn-qty" onclick="cambiarCantidad(${index}, 1)">+</button>
             </div>
+            <div class="cart-item-total">
+                <p>$${itemTotal.toFixed(2)}</p>
+            </div>
+            <button class="btn-remove" onclick="eliminarDelCarrito(${index})">🗑️</button>
         `;
-        cartItemsContainer.appendChild(itemDiv);
+        
+        cartItemsContainer.appendChild(cartItem);
     });
-
-    calcularTotales();
+    
+    document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+    document.getElementById('total').textContent = `$${subtotal.toFixed(2)}`;
+    document.getElementById('modalTotal').textContent = `$${subtotal.toFixed(2)}`;
 }
 
 function cambiarCantidad(index, cambio) {
@@ -105,7 +113,7 @@ function calcularTotales() {
 
 function procesarCompra() {
     if (carrito.length === 0) {
-        alert('❌ El carrito está vacío');
+        alert('El carrito está vacío');
         return;
     }
 
@@ -121,15 +129,17 @@ async function confirmarCompra() {
     try {
         const total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
 
+        const nombreCliente = localStorage.getItem('nombreCliente') || 'Cliente Sin Nombre';
+
         const ventaData = {
-            nombre: "Cliente PetShop",
+            nombre: nombreCliente,
             productos: carrito.map(item => ({
                 id: item.id,
                 cantidad: item.cantidad
             }))
         };
 
-        console.log('📤 Enviando venta:', ventaData);
+        console.log('Enviando venta:', ventaData);
 
         const res = await fetch('/api/venta', {
             method: 'POST',
@@ -141,10 +151,9 @@ async function confirmarCompra() {
         console.log('📥 Respuesta:', data);
 
         if (res.ok) {
-            // ✅ GUARDAR INFORMACIÓN DE LA VENTA EN LOCALSTORAGE
             const ventaInfo = {
                 id: data.ventaId,
-                nombre: ventaData.nombre,
+                nombre: nombreCliente,
                 fecha: new Date().toLocaleDateString('es-AR'),
                 productos: carrito,
                 total: total
@@ -152,18 +161,17 @@ async function confirmarCompra() {
             
             localStorage.setItem('ultimaVenta', JSON.stringify(ventaInfo));
             
-            alert('✅ ¡Compra realizada exitosamente!');
+            alert('¡Compra realizada exitosamente!');
             localStorage.removeItem('carrito');
             carrito = [];
             document.getElementById('confirmModal').style.display = 'none';
             
-            // ✅ REDIRIGIR AL TICKET
             setTimeout(() => window.location.href = 'ticket.html', 1500);
         } else {
-            alert('❌ Error: ' + (data.error || 'Error desconocido'));
+            alert('Error: ' + (data.error || 'Error desconocido'));
         }
     } catch (err) {
-        console.error('❌ Error catch:', err);
-        alert('❌ Error al procesar la compra: ' + err.message);
+        console.error('Error catch:', err);
+        alert('Error al procesar la compra: ' + err.message);
     }
 }

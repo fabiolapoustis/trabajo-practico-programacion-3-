@@ -1,6 +1,5 @@
-import bcrypt from "bcryptjs";
 import express from "express";
-import { sequelize } from "./ORM/db/conexiondb.js";
+import { sequelize } from './ORM/db/conexiondb.js';
 import session from "express-session";
 import cors from "cors";
 import path from "path";
@@ -37,12 +36,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-// Esto trae y muestra el formulario de login
 export const mostrarLogin = (req, res) => {
   res.render("login", { titulo: "Login", error: null });
 };
-
 
 app.use(
   session({
@@ -54,12 +50,11 @@ app.use(
 );
 
 // Archivos estáticos
-//app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/ORM', express.static(path.join(__dirname, 'ORM')));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Configuración Multer
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) =>
     cb(null, path.join(__dirname, "uploads")),
@@ -95,17 +90,8 @@ const initDDBB = async () => {
       pass: "admin123"
     },
   });
-
-  await Producto.findOrCreate({
-    where: { nombre: "Peine" },
-    defaults: {
-      precio: "1200",
-      descripcion: "Como peina este peine",
-      imagen: "",
-      categoria: "Gato",
-      activo: true,
-    },
-  });
+  const { cargarProductos } = await import('./ORM/controladores/cargaDatos.js');
+  await cargarProductos();
 
   console.log("✔ Seeds cargados");
 };
@@ -116,7 +102,7 @@ sequelize
   .then(() => initDDBB())
   .then(() => {
     app.listen(PORT, () =>
-      console.log("🚀 Servidor funcionando en http://localhost:" + PORT)
+      console.log("Servidor funcionando en http://localhost:" + PORT)
     );
   })
-  .catch((error) => console.log("❌ Error:", error));
+  .catch((error) => console.log("Error:", error));

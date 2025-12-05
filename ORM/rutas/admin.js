@@ -18,10 +18,9 @@ import { upload } from "../middlewares/upload.js";
 
 const router = Router();
 
-// Middleware para proteger rutas
 const verificarAuth = (req, res, next) => {
   if (!req.session.usuario) {
-    return res.redirect('/login'); // redirige al login si no hay sesión
+    return res.redirect('/login');
   }
   next();
 };

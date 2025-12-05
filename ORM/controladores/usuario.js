@@ -3,7 +3,7 @@ import { Usuario } from "../modelos/usuario.js";
 
 export const getUsuario = async (req, res) => {
     try {
-        const usuarios = await Usuario.findAll({attributes: { exclude: ['pass'] } // No enviar contraseñas
+        const usuarios = await Usuario.findAll({attributes: { exclude: ['pass'] }
         });
         res.json(usuarios);
     } catch (error) {

@@ -12,19 +12,18 @@ import { upload } from "../middlewares/upload.js";
 const router = Router();
 
 // Rutas públicas (para el cliente)
-router.get("/activos", getProductosActivos); // Debe ir ANTES de "/:id"
+router.get("/activos", getProductosActivos);
 
 // Rutas generales
-router.get("/", getProducto); // Listar todos (con filtros y paginación)
-router.get("/:id", getProductoPorId); // Obtener uno por ID
+router.get("/", getProducto); 
+router.get("/:id", getProductoPorId); 
 
 // Rutas de administración
 
 router.post("/", upload.single('imagen'), validarProducto, crearProducto);
-//router.post("/", crearProducto); // Crear
-router.put("/:id", modificarProducto); // Modificar
-router.delete("/:id", desactivarProducto); // Desactivar (baja lógica)
-router.put("/:id/activar", activarProducto); // Activar
+router.put("/:id", modificarProducto); 
+router.delete("/:id", desactivarProducto); 
+router.put("/:id/activar", activarProducto); 
 router.post("/", upload.single('imagen'), crearProducto); 
 
 //validaciones

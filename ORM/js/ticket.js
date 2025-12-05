@@ -3,7 +3,6 @@ let ventaInfo = null;
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🎫 Ticket.js cargado');
 
-    // Cargar información de la venta
     cargarVentaInfo();
 
     if (!ventaInfo) {

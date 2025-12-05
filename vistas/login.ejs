@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - P&G Petshop</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>">
 
   <style>
     * {
@@ -247,11 +248,11 @@
 
   <script>
     function autocompletar() {
-      // Autocompletar con el primer usuario de la base de datos
+
       document.getElementById('email').value = 'admin@tienda.com';
       document.getElementById('pass').value = 'admin123';
       
-      // Animación visual
+
       const inputs = document.querySelectorAll('input');
       inputs.forEach(input => {
         input.style.background = '#e8f5e9';

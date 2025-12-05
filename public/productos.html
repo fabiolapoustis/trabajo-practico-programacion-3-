@@ -11,6 +11,7 @@
     <div class="container">
         <header>
             <div class="logo">🐾</div>
+            <p class="customer-name">Cliente: <span id="customerNameDisplay"></span></p>
             <h1 class="app-name">P&G Petshop</h1>
             <p class="authors">Desarrollado por: Fabiola Poustis & Julian Ayuso</p>
             <p class="customer-name">Cliente: <span id="customerNameDisplay"></span></p>
@@ -18,7 +19,7 @@
                 <a href="index.html">Inicio</a>
                 <a href="productos.html" class="active">Productos</a>
                 <a href="carrito.html">Carrito <span id="cartBadge" class="badge">0</span></a>
-                <!-- <a href="/admin/login" class="admin-link">Admin 🔐</a> -->
+
             </nav>
         </header>
 
@@ -28,7 +29,7 @@
                 <p>Selecciona los productos que deseas comprar</p>
             </div>
 
-            <!-- Filtros por categoría -->
+ 
             <div class="category-filter">
                 <button class="filter-btn active" data-category="all">
                     Todos los productos
@@ -41,7 +42,7 @@
                 </button>
             </div>
 
-            <!-- Loading y errores -->
+
             <div id="loadingProducts" class="loading">
                 <div class="spinner"></div>
                 <p>Cargando productos...</p>
@@ -52,17 +53,16 @@
                 <button onclick="location.reload()" class="btn btn-secondary">Reintentar</button>
             </div>
 
-            <!-- Grid de productos -->
+
             <div id="productsGrid" class="products-grid"></div>
 
-            <!-- Paginación -->
+
             <div id="pagination" class="pagination" style="display: none;">
                 <button id="prevPage" class="btn btn-secondary">← Anterior</button>
                 <span id="pageInfo" class="page-info">Página 1 de 1</span>
                 <button id="nextPage" class="btn btn-secondary">Siguiente →</button>
             </div>
 
-            <!-- Botón ir al carrito -->
             <div class="floating-cart-btn">
                 <a href="carrito.html" class="btn btn-cart">
                     🛒 Ver Carrito (<span id="cartCount">0</span>)
@@ -74,7 +74,8 @@
             <p>&copy; 2025 PetShop AutoServicio. Todos los derechos reservados.</p>
         </footer>
     </div>
-    <script>
+
+<script>
 let productosDisponibles = [];
 const productsGrid = document.getElementById("productsGrid");
 const loading = document.getElementById("loadingProducts");
@@ -95,19 +96,37 @@ async function cargarProductos(categoria = "all") {
 
         productosDisponibles = productos;
 
-        if (productos.length === 0) {
-            productsGrid.innerHTML = "<p>No hay productos disponibles.</p>";
-        }
-
         productos.forEach(p => {
             const div = document.createElement("div");
             div.classList.add("product-card");
+            div.setAttribute("data-product-id", p.id);
+            
+            const imagenUrl = p.imagen ? `/uploads/${p.imagen}` : 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><text y="50%" x="50%" text-anchor="middle" font-size="80">🐾</text></svg>';
+            
+            const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            const itemEnCarrito = carrito.find(item => item.id === p.id);
+            const cantidadEnCarrito = itemEnCarrito ? itemEnCarrito.cantidad : 0;
+            
             div.innerHTML = `
-                <img class="product-image" src="${p.imagen || 'default.png'}" alt="${p.nombre}">
+                <img class="product-image" 
+                     src="${imagenUrl}" 
+                     alt="${p.nombre}"
+                     onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22><text y=%2250%25%22 x=%2250%25%22 text-anchor=%22middle%22 font-size=%2280%22>🐾</text></svg>'">
                 <h3>${p.nombre}</h3>
-                <p>${p.descripcion}</p>
-                <p>Precio: $${p.precio}</p>
-                <button class="btn btn-primary" onclick="agregarAlCarrito(${p.id})">Agregar al carrito</button>
+                <p>${p.descripcion || 'Sin descripción'}</p>
+                <p class="product-price">$${parseFloat(p.precio).toFixed(2)}</p>
+                
+                ${cantidadEnCarrito > 0 ? `
+                    <div class="product-controls">
+                        <button class="btn btn-minus" onclick="disminuirCantidad(${p.id})">−</button>
+                        <span class="product-quantity" id="qty-${p.id}">${cantidadEnCarrito}</span>
+                        <button class="btn btn-plus" onclick="agregarAlCarrito(${p.id})">+</button>
+                    </div>
+                ` : `
+                    <button class="btn btn-primary" onclick="agregarAlCarrito(${p.id})">
+                        Agregar al carrito
+                    </button>
+                `}
             `;
             productsGrid.appendChild(div);
         });
@@ -120,7 +139,6 @@ async function cargarProductos(categoria = "all") {
     }
 }
 
-// Filtrar por categoría
 document.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", () => {
         document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
@@ -131,18 +149,14 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
 
 async function agregarAlCarrito(idProducto) {
     try {
-        // Buscar el producto en el array que ya cargamos
         const producto = productosDisponibles.find(p => p.id === idProducto);
         
         if (!producto) {
-            alert('❌ Producto no encontrado');
+            alert('Producto no encontrado');
             return;
         }
         
-        // Obtener carrito actual del localStorage
         let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-        
-        // Buscar si el producto ya existe
         const productoExistente = carrito.find(item => item.id === idProducto);
         
         if (productoExistente) {
@@ -159,11 +173,58 @@ async function agregarAlCarrito(idProducto) {
         
         localStorage.setItem('carrito', JSON.stringify(carrito));
         actualizarBadgeCarrito();
-        alert(`✅ ${producto.nombre} agregado al carrito!`);
+        actualizarBotonProducto(idProducto);
         
     } catch (err) {
         console.error('Error:', err);
-        alert('❌ Error al agregar al carrito');
+        alert('Error al agregar al carrito');
+    }
+}
+
+function disminuirCantidad(idProducto) {
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const productoIndex = carrito.findIndex(item => item.id === idProducto);
+    
+    if (productoIndex !== -1) {
+        carrito[productoIndex].cantidad--;
+        
+        if (carrito[productoIndex].cantidad === 0) {
+            carrito.splice(productoIndex, 1);
+        }
+        
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        actualizarBadgeCarrito();
+        actualizarBotonProducto(idProducto);
+    }
+}
+
+function actualizarBotonProducto(idProducto) {
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const itemEnCarrito = carrito.find(item => item.id === idProducto);
+    const cantidad = itemEnCarrito ? itemEnCarrito.cantidad : 0;
+    
+    const productoCard = document.querySelector(`[data-product-id="${idProducto}"]`);
+    if (!productoCard) return;
+    
+    const producto = productosDisponibles.find(p => p.id === idProducto);
+    if (!producto) return;
+    
+    const controls = productoCard.querySelector('.product-controls, .btn-primary');
+    
+    if (cantidad > 0) {
+        controls.outerHTML = `
+            <div class="product-controls">
+                <button class="btn btn-minus" onclick="disminuirCantidad(${idProducto})">−</button>
+                <span class="product-quantity" id="qty-${idProducto}">${cantidad}</span>
+                <button class="btn btn-plus" onclick="agregarAlCarrito(${idProducto})">+</button>
+            </div>
+        `;
+    } else {
+        controls.outerHTML = `
+            <button class="btn btn-primary" onclick="agregarAlCarrito(${idProducto})">
+                Agregar al carrito
+            </button>
+        `;
     }
 }
 
@@ -178,9 +239,16 @@ function actualizarBadgeCarrito() {
     if (cartCount) cartCount.textContent = cantidad;
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+        const nombreCliente = localStorage.getItem('nombreCliente') || 'Invitado';
+        const displayElement = document.getElementById('customerNameDisplay');
+        if (displayElement) {
+            displayElement.textContent = nombreCliente;
+        }
+    });
+
 cargarProductos();
 actualizarBadgeCarrito();
-
 </script>
 
 <script src="js/config.js"></script>
